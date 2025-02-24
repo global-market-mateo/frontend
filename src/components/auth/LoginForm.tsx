@@ -1,86 +1,68 @@
 "use client";
+import { Button, Form, FormField, FormMessage, Label } from "@/components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
 import { z } from "zod";
-import { Button } from "../ui/button";
-import { doCredentialLogin } from "@/actions/actions";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-const formSchema = z.object({
-  email: z.string().min(2, {
-    message: "Faltan letras",
-  }),
-  password: z.string().min(5, {
-    message: "Faltan letras",
-  }),
+import { MyFormItem } from "@/components/MyFormItem";
+import { useLogin } from "@/actions";
+import Link from "next/link";
+
+const LoginSchema = z.object({
+  email: z
+    .string()
+    .email("Debe ser un correo electrónico válido")
+    .min(3, "El campo  debe tener al menos 3 caracteres."),
+  password: z.string().min(6, "El campo no es valido"),
 });
+export type LoginSchemaType = z.infer<typeof LoginSchema>;
 
 export const LoginForm = () => {
-  const [errorMessage, setError] = useState<null | string>(null);
+  const { mutate: login, isError } = useLogin();
 
-  const router = useRouter();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<LoginSchemaType>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const response = await doCredentialLogin(values);
-      if (!response.ok) {
-        setError(response.message);
-      } else {
-        router.push("/");
-      }
-    } catch (e) {
-      setError("Check your Credentials");
-    }
-  }
+  const onSubmit = (data) => {
+    login(data);
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        onError={(error) => console.log(error)}
+        className="grid gap-4"
+      >
         <FormField
           control={form.control}
           name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="mateo@gmail.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          render={({ field }) => <MyFormItem field={field} label="Email" />}
         />
 
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input placeholder="password" type="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <div className="flex flex-col pt-2">
+              <Label className="flex items-center">
+                <div>Contraseña</div>
+                <Link
+                  href="/forgot-password"
+                  className="ml-auto inline-block text-sm underline"
+                >
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </Label>
+              <MyFormItem field={field} type="password" />
+            </div>
           )}
         />
-
-        {errorMessage && <FormMessage>{errorMessage}</FormMessage>}
-        <Button type="submit">Submit</Button>
+        <FormMessage>{isError && "No autorizado"}</FormMessage>
+        <Button type="submit">Ingresar</Button>
       </form>
     </Form>
   );

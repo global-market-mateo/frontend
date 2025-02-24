@@ -14,7 +14,7 @@ declare global {
 
       // NEXT_PUBLIC_DB_URL: string;
       // SUPABASE_SERVICE_ROLE_KEY: string;
-      API_SERVER_BASE_URL: string;
+      NEXT_PUBLIC_BACKEND_URL: string;
     }
   }
 }
