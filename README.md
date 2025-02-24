@@ -1,36 +1,158 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# nest-next-init
 
-## Getting Started
+Este repositorio es un monorepo que utiliza **Turborepo** para manejar dos aplicaciones principales: un backend con **Nest.js** y un frontend con **Next.js**. El proyecto está administrado con **pnpm** como gestor de paquetes.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🗂️ Estructura del Proyecto
+
+```
+apps/
+├── backend/     # Aplicación de backend con Nest.js
+└── frontend/    # Aplicación de frontend con Next.js
+.gitignore       # Archivos y carpetas ignorados por Git
+.env             # Variables de entorno
+pnpm-workspace.yaml  # Configuración del workspace de pnpm
+package.json     # Configuración general y scripts del monorepo
+turbo.json       # Configuración de Turborepo
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Scripts Disponibles
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Estos scripts se ejecutan desde la raíz del proyecto:
 
-## Learn More
+- `pnpm dev`: Ejecuta ambos servidores (frontend y backend) en paralelo.
+- `pnpm build`: Construye todas las aplicaciones y paquetes.
+- `pnpm lint`: Ejecuta el linter en todas las aplicaciones.
+- `pnpm format`: Formatea el código con Prettier.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ⚙️ Configuración de Archivos
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### `package.json`
 
-## Deploy on Vercel
+Define los scripts principales y las dependencias de desarrollo.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```json
+{
+  "name": "nest-next-init",
+  "version": "1.0.0",
+  "packageManager": "pnpm@9.4.0",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"*_/**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "turbo": "^2.2.3"
+  }
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### `.gitignore`
+
+Ignora archivos y carpetas que no deben ser rastreados por Git:
+
+```
+.env
+node_modules/
+Dockerfile
+.dockerignore
+backend/
+frontend/
+.turbo/
+pnpm-lock.yaml
+```
+
+### `pnpm-workspace.yaml`
+
+Define las carpetas incluidas en el workspace de pnpm:
+
+```yaml
+packages:
+  - "apps/*"
+```
+
+### `turbo.json`
+
+Configura las tareas y sus dependencias en Turborepo:
+
+```json
+{
+  "tasks": {
+    "dev": {
+      "dependsOn": ["^dev"],
+      "outputs": []
+    },
+    "dev:backend": {
+      "outputs": [],
+      "cache": false
+    },
+    "dev:frontend": {
+      "dependsOn": ["dev:backend"],
+      "outputs": [],
+      "cache": false
+    }
+  },
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"]
+}
+```
+
+### `.env`
+
+Contiene las variables de entorno. Ejemplo:
+
+```
+FRONTEND_PORT=3000
+```
+
+---
+
+## 🛠️ Instalación y Uso
+
+1. **Clona el repositorio:**
+
+   ```bash
+   git clone <url-del-repo>
+   cd nest-next-init
+   ```
+
+2. **Instala las dependencias:**
+
+   ```bash
+   pnpm install
+   ```
+
+3. **Configura las variables de entorno:**
+   Crea un archivo `.env` en la raíz con el siguiente contenido:
+
+   ```env
+   FRONTEND_PORT=3000
+   ```
+
+4. **Inicia el proyecto:**
+
+   ```bash
+   pnpm dev
+   ```
+
+5. **Accede a las aplicaciones:**
+   - Frontend: [http://localhost:3000](http://localhost:3000)
+   - Backend: Dependerá de la configuración de Nest.js
+
+---
+
+## 📝 Licencia
+
+Este proyecto está licenciado bajo la licencia ISC.
+
+---
+
+## 👨‍💻 Autor
+
+Desarrollado por Mateo.
