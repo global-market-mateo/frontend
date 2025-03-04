@@ -10,11 +10,6 @@ Este repositorio es un monorepo que utiliza **Turborepo** para manejar dos aplic
 apps/
 ├── backend/     # Aplicación de backend con Nest.js
 └── frontend/    # Aplicación de frontend con Next.js
-.gitignore       # Archivos y carpetas ignorados por Git
-.env             # Variables de entorno
-pnpm-workspace.yaml  # Configuración del workspace de pnpm
-package.json     # Configuración general y scripts del monorepo
-turbo.json       # Configuración de Turborepo
 ```
 
 ---
@@ -32,26 +27,6 @@ Estos scripts se ejecutan desde la raíz del proyecto:
 
 ## ⚙️ Configuración de Archivos
 
-### `package.json`
-
-Define los scripts principales y las dependencias de desarrollo.
-
-```json
-{
-  "name": "nest-next-init",
-  "version": "1.0.0",
-  "packageManager": "pnpm@9.4.0",
-  "scripts": {
-    "dev": "turbo run dev --parallel",
-    "build": "turbo run build",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"*_/**/*.{ts,tsx,md}\""
-  },
-  "devDependencies": {
-    "turbo": "^2.2.3"
-  }
-}
-```
 
 ### `.gitignore`
 
@@ -68,82 +43,63 @@ frontend/
 pnpm-lock.yaml
 ```
 
-### `pnpm-workspace.yaml`
 
-Define las carpetas incluidas en el workspace de pnpm:
-
-```yaml
-packages:
-  - "apps/*"
-```
-
-### `turbo.json`
-
-Configura las tareas y sus dependencias en Turborepo:
-
-```json
-{
-  "tasks": {
-    "dev": {
-      "dependsOn": ["^dev"],
-      "outputs": []
-    },
-    "dev:backend": {
-      "outputs": [],
-      "cache": false
-    },
-    "dev:frontend": {
-      "dependsOn": ["dev:backend"],
-      "outputs": [],
-      "cache": false
-    }
-  },
-  "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"]
-}
-```
-
-### `.env`
-
-Contiene las variables de entorno. Ejemplo:
-
-```
-FRONTEND_PORT=3000
-```
 
 ---
+# 🛠️ Instalación y Uso
 
-## 🛠️ Instalación y Uso
+## 1️⃣ Clona el repositorio
 
-1. **Clona el repositorio:**
+```bash
+mkdir apps
+cd apps
+git clone -b frontend <url-del-repo> frontend
+git clone -b backend <url-del-repo> backend
+```
 
-   ```bash
-   git clone <url-del-repo>
-   cd nest-next-init
-   ```
+## 2️⃣ Configura Turbo Repo (opcional, si aún no lo tienes)
 
-2. **Instala las dependencias:**
+Si deseas utilizar Turbo Repo para mejorar la gestión del monorepo:
 
-   ```bash
-   pnpm install
-   ```
+```bash
+pnpm add turbo --workspace-root
+```
 
-3. **Configura las variables de entorno:**
-   Crea un archivo `.env` en la raíz con el siguiente contenido:
+O, si estás creando un nuevo monorepo desde cero:
 
-   ```env
-   FRONTEND_PORT=3000
-   ```
+```bash
+pnpm dlx create-turbo@latest
+```
 
-4. **Inicia el proyecto:**
+## 3️⃣ Instala las dependencias
 
-   ```bash
-   pnpm dev
-   ```
+```bash
+pnpm install
+```
 
-5. **Accede a las aplicaciones:**
-   - Frontend: [http://localhost:3000](http://localhost:3000)
-   - Backend: Dependerá de la configuración de Nest.js
+## 4️⃣ Configura las variables de entorno
+
+Crea un archivo `.env` en la raíz del proyecto con el siguiente contenido:
+
+```env
+FRONTEND_PORT=3000
+BACKEND_PORT=4000
+```
+
+(O ajusta según la configuración de tu backend.)
+
+## 5️⃣ Inicia el proyecto
+
+Ejecuta el frontend y backend en paralelo:
+
+```bash
+pnpm dev
+```
+
+## 6️⃣ Accede a las aplicaciones
+
+- **Frontend:** [http://localhost:3000](http://localhost:3000)
+- **Backend:** Dependerá de la configuración de Nest.js
 
 ---
 
