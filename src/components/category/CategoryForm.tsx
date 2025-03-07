@@ -48,7 +48,13 @@ export const CategoryForm = ({ category, className }: Props) => {
         <FormField
           control={form.control}
           name="name"
-          render={({ field }) => <MyFormItem field={field} label="Titulo" />}
+          render={({ field }) => (
+            <MyFormItem
+              field={field}
+              label="Titulo de la categoria"
+              placeholder="Titulo de la categoria"
+            />
+          )}
         />
 
         {/* <DevTool control={form.control} /> */}
