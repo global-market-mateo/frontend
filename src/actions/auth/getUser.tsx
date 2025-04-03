@@ -4,6 +4,9 @@ interface Business {
   id: string;
   name: string;
   ownerId: string;
+  paymentMethods: string[];
+  deliveryMethods: string[];
+  wppNumber: string | null;
 }
 
 interface User {

@@ -1,6 +1,7 @@
 "use client";
 import { Category, useCategories, useDeleteCategory } from "@/actions";
 import {
+  CategoryForm,
   CategorySheet,
   ContentLayout,
   Table,
@@ -20,6 +21,8 @@ export default function CategoryPage() {
 
   return (
     <ContentLayout title="Categorias">
+      <CategoryForm className="w-2/5 mb-10" />
+
       <Table>
         <TableHeader>
           <TableRow>

@@ -139,7 +139,7 @@ export const OrderForm = ({ businessName }: { businessName: string }) => {
             )}
           />
           <Button type="submit">Realizar pedido</Button>
-          <DevTool control={form.control} />
+          {/* <DevTool control={form.control} /> */}
         </form>
       </Form>
     </div>

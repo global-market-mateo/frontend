@@ -52,7 +52,11 @@ const ProductSchema = z.object({
     .string()
     .url("El campo 'url' debe ser una URL válida.")
     .min(3, "El campo 'url' debe tener al menos 3 caracteres."),
-  categoryId: z.string().uuid("El campo 'categoryId' debe ser un UUID válido."),
+  categoryId: z
+    .string()
+    .uuid("El campo 'categoryId' debe ser un UUID válido.")
+    .optional(),
+  categoryName: z.string().optional(),
   price: z.string(), //.int("El campo 'price' debe ser un número entero."),
   stock: z.boolean().refine((val) => typeof val === "boolean", {
     message: "El campo 'stock' debe ser un valor booleano.",
@@ -79,11 +83,12 @@ export const ProductForm = ({ product, pagination = [], className }: Props) => {
   });
   const onSubmit = (values: ProductSchemaType) => {
     // console.log(product.id);
-    console.log(values);
+    // console.log(values);
     if (product) {
       if (product.id) {
         update({ ...values, id: product.id });
       } else {
+        // console.log("create");
         create(values);
       }
     } else {
@@ -95,7 +100,7 @@ export const ProductForm = ({ product, pagination = [], className }: Props) => {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         onError={(error) => console.log(error)}
-        className={`flex flex-col gap-4 ${className}`}
+        className={`flex flex-col ${className} gap-1 overflow-y-auto h-full`}
       >
         <FormField
           control={form.control}
@@ -141,7 +146,7 @@ export const ProductForm = ({ product, pagination = [], className }: Props) => {
           control={form.control}
           name="stock"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm mt-5">
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm mt-2">
               <FormLabel>Stock</FormLabel>
               <FormControl>
                 <Switch
@@ -152,8 +157,10 @@ export const ProductForm = ({ product, pagination = [], className }: Props) => {
             </FormItem>
           )}
         />
-        <DevTool control={form.control} />
-        <Button type="submit">Guardar</Button>
+        {/* <DevTool control={form.control} /> */}
+        <Button className="mt-2" type="submit">
+          Guardar
+        </Button>
       </form>
     </Form>
   );

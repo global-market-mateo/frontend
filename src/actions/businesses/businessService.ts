@@ -1,3 +1,4 @@
+import { UUID } from "crypto";
 import { Api } from "../Api";
 import { BusinessProductResponse } from "../businessProducts/businessProductsService";
 
@@ -19,6 +20,12 @@ export const getBusinessFn = async (): Promise<BusinessResponse[]> => {
   const response = await Api.get("/businesses");
   return response.data;
 };
+
+export const getBusinessByIdFn = async (businessId: UUID): Promise<BusinessResponse> => {
+  const response = await Api.get(`/businesses/${businessId}`);
+  return response.data;
+};
+
 export const getCategriesBusinessFn = async (
   businessName: string
 ): Promise<{ name: string; id: string }[]> => {

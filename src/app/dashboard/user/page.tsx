@@ -3,11 +3,11 @@ import { getUser } from "@/actions";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
   ContentLayout,
 } from "@/components";
+import UserForm from "@/components/user/UserForm";
 
 export default function UserPage() {
   const { data, error } = getUser();
@@ -17,19 +17,20 @@ export default function UserPage() {
   }
 
   return (
-    <ContentLayout title="Usuario">
+    <ContentLayout title="Usuario / Negocio">
       {data && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Usuario</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div>Nombre: {data.name}</div>
-            <div>Email: {data.email}</div>
-            <div>Nombre del negocio: {data.businesses[0].name}</div>
-          </CardContent>
-          <CardFooter>{/* Add any footer content if needed */}</CardFooter>
-        </Card>
+        <div className="flex flex-col gap-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Usuario</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div>Nombre: {data.name}</div>
+              <div>Email: {data.email}</div>
+            </CardContent>
+          </Card>
+          <UserForm />
+        </div>
       )}
     </ContentLayout>
   );

@@ -66,7 +66,7 @@ export const columns: ColumnDef<BusinessProduct>[] = [
   },
   {
     accessorKey: "description",
-    header: ({ column }) => Sort(column, "Description"),
+    header: ({ column }) => Sort(column, "Descripción"),
   },
   {
     accessorKey: "brand",
@@ -76,9 +76,9 @@ export const columns: ColumnDef<BusinessProduct>[] = [
     accessorKey: "category",
     cell: ({ row }) => {
       const category: { name: string; id: string } = row.getValue("category");
-      return <p>{category.name}</p>;
+      return <p>{category?.name || "Sin categoria"}</p>;
     },
-    header: ({ column }) => Sort(column, "Categoria"),
+    header: ({ column }) => Sort(column, "Categoría"),
   },
   {
     accessorKey: "amount",

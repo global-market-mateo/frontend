@@ -71,10 +71,6 @@ export function getMenuList(pathname: string): Group[] {
               href: "/dashboard/category",
               label: "Todas las categorias",
             },
-            {
-              href: "/dashboard/category/new",
-              label: "Nueva categoria",
-            },
           ],
         },
         {
@@ -89,14 +85,10 @@ export function getMenuList(pathname: string): Group[] {
       menus: [
         {
           href: "/dashboard/user",
-          label: "Usuario",
+          label: "Usuario / Negocio",
           icon: Users,
         },
-        {
-          href: "/account",
-          label: "Account",
-          icon: Settings,
-        },
+        
       ],
     },
   ];

@@ -9,7 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { useCategories } from "@/actions";
+import { useCategories, useCreateCategory } from "@/actions";
+import { useState } from "react";
+import { Button } from "./ui/button";
 
 export const MyFormItem = <
   TFieldValues extends FieldValues = FieldValues,
@@ -27,6 +29,10 @@ export const MyFormItem = <
   placeholder?: string;
   setDeliveryMethod?: (value: string) => void;
 }) => {
+  const [newCategory, setNewCategory] = useState("");
+  const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
+  const { data: categories } = useCategories();
+
   if (field.name === "pay_method") {
     return (
       <FormItem>
@@ -78,14 +84,24 @@ export const MyFormItem = <
       </FormItem>
     );
   }
+  const { mutate: create } = useCreateCategory();
 
   if (field.name === "categoryId") {
-    const { data: categories } = useCategories();
     if (categories) {
       return (
         <FormItem>
           <FormLabel>Categoria</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select
+            onValueChange={(value) => {
+              if (value === "new") {
+                setShowNewCategoryInput(true);
+              } else {
+                setShowNewCategoryInput(false);
+                field.onChange(value);
+              }
+            }}
+            defaultValue={field.value}
+          >
             <SelectTrigger>
               <SelectValue placeholder="[seleccione]" />
             </SelectTrigger>
@@ -95,8 +111,42 @@ export const MyFormItem = <
                   {category.name}
                 </SelectItem>
               ))}
+              <SelectItem key="new" value="new">
+                Agregar nueva categoría
+              </SelectItem>
             </SelectContent>
           </Select>
+
+          {showNewCategoryInput && (
+            <div className="mt-2">
+              <Input
+                type="text"
+                placeholder="Nombre de nueva categoría"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+              />
+              <div className="flex justify-end gap-2 mt-2">
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    create(newCategory);
+                    // Aquí agregarías la lógica para guardar la nueva categoría
+                    // Por ejemplo, llamar a una API y luego actualizar la lista de categorías
+                    setShowNewCategoryInput(false);
+                  }}
+                >
+                  Guardar
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setShowNewCategoryInput(false)}
+                >
+                  Cancelar
+                </Button>
+              </div>
+            </div>
+          )}
         </FormItem>
       );
     }
