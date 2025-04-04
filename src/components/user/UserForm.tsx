@@ -1,79 +1,103 @@
-import { getUser } from "@/actions";
+import { getUser, updateBusiness } from "@/actions";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
-import Link from "next/link";
-import { Settings } from "lucide-react";
 import { Form, FormField } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Input } from "../ui/input";
+import { Checkbox } from "../ui/checkbox";
+import { toast } from "@/hooks/use-toast";
+const paymentMethods = {
+  CASH: "Efectivo",
+  CREDIT_CARD: "Tarjeta de credito",
+  DEBIT_CARD: "Tarjeta de debito",
+  TRANSFER: "Transferencia",
+} as const;
+
+const deliveryMethods = {
+  DELIVERY: "Envio",
+  PICKUP: "Retiro",
+} as const;
 
 const UserSchema = z.object({
-  name: z.string().min(1),
-  email: z.string().email(),
-  paymentMethods: z.string().min(1),
-  deliveryMethods: z.string().min(1),
-  businessName: z.string().min(1),
+  paymentMethods: z.array(
+    z.enum(Object.keys(paymentMethods) as [string, ...string[]])
+  ),
+  deliveryMethods: z.array(
+    z.enum(Object.keys(deliveryMethods) as [string, ...string[]])
+  ),
+  wppNumber: z.string().optional(),
 });
 
-const UserForm = () => {
+export const BussinessForm = () => {
   const { data, error } = getUser();
+  const { mutate: update } = updateBusiness();
   const form = useForm<z.infer<typeof UserSchema>>({
     resolver: zodResolver(UserSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      paymentMethods: data?.businesses[0].paymentMethods as (
+        | "CASH"
+        | "CREDIT_CARD"
+        | "DEBIT_CARD"
+        | "TRANSFER"
+      )[],
+      deliveryMethods: data?.businesses[0].deliveryMethods as (
+        | "DELIVERY"
+        | "PICKUP"
+      )[],
     },
   });
   if (error) {
     return <div>Error loading user data</div>;
   }
 
-  const handleEditBusiness = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("Editar negocio");
-  };
 
   const onSubmit = (values: z.infer<typeof UserSchema>) => {
-    console.log(values);
+    update({
+      id: data?.businesses[0].id,
+      paymentMethods: values.paymentMethods,
+      deliveryMethods: values.deliveryMethods,
+      wppNumber: values.wppNumber,
+    });
+    
   };
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">
-        <CardTitle>Negocio</CardTitle>
-        <Button
-          onClick={handleEditBusiness}
-          variant="outline"
-          className="flex flex-row gap-2 m-0"
-          style={{ margin: 0 }}
-        >
-          <Link className="flex flex-row gap-2" href="/dashboard/bussiness">
-            <p>Editar</p>
-            <Settings className="w-4 h-4" />
-          </Link>
-        </Button>
+        <CardTitle>Negocio "{data?.businesses[0].name}"</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             onError={(error) => console.log(error)}
-            className={`flex flex-col gap-1 overflow-y-auto h-full`}
+            className="flex justify-between gap-2"
           >
-            <FormField
-              control={form.control}
-              name="businessName"
-              render={({ field }) => <Input {...field} />}
-            />
             <FormField
               control={form.control}
               name="paymentMethods"
               render={({ field }) => (
                 <div className="flex flex-col gap-2">
                   <span>Metodo de pago :</span>
-                  <Input {...field} />
+                  {Object.keys(paymentMethods).map((method) => (
+                    <span key={method} className="flex flex-row gap-2 ">
+                      <Checkbox
+                        checked={field.value.includes(method)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            field.onChange([...field.value, method]);
+                          } else {
+                            field.onChange(
+                              field.value.filter((m) => m !== method)
+                            );
+                          }
+                        }}
+                      />
+                      <span>
+                        {paymentMethods[method as keyof typeof paymentMethods]}
+                      </span>
+                    </span>
+                  ))}
                 </div>
               )}
             />
@@ -83,17 +107,34 @@ const UserForm = () => {
               render={({ field }) => (
                 <div className="flex flex-col gap-2">
                   <span>Metodo de entrega :</span>
-                  <Input {...field} />
+                  {Object.keys(deliveryMethods).map((method) => (
+                    <span key={method} className="flex flex-row gap-2">
+                      <Checkbox
+                        checked={field.value.includes(method)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            field.onChange([...field.value, method]);
+                          }
+                        }}
+                      />
+                      <span>
+                        {
+                          deliveryMethods[
+                            method as keyof typeof deliveryMethods
+                          ]
+                        }
+                      </span>
+                    </span>
+                  ))}
                 </div>
               )}
             />
-            <Button type="submit">Guardar</Button>
-            
+            <div className="self-end flex flex-row justify-end">
+              <Button type="submit">Guardar</Button>
+            </div>
           </form>
         </Form>
       </CardContent>
     </Card>
   );
 };
-
-export default UserForm;

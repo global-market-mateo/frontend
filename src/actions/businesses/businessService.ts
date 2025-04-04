@@ -1,6 +1,7 @@
 import { UUID } from "crypto";
 import { Api } from "../Api";
 import { BusinessProductResponse } from "../businessProducts/businessProductsService";
+import { Business } from "./businessQueries";
 
 interface BusinessResponse {
   id: string;
@@ -21,7 +22,9 @@ export const getBusinessFn = async (): Promise<BusinessResponse[]> => {
   return response.data;
 };
 
-export const getBusinessByIdFn = async (businessId: UUID): Promise<BusinessResponse> => {
+export const getBusinessByIdFn = async (
+  businessId: UUID
+): Promise<BusinessResponse> => {
   const response = await Api.get(`/businesses/${businessId}`);
   return response.data;
 };
@@ -41,4 +44,26 @@ export const getPublicProductsBusinessFn = async ({
     `/${businessName}/products/${category ? category : ""}`
   );
   return response.data;
+};
+
+interface BusinessDto {
+  id: string;
+  paymentMethods?: string[];
+  deliveryMethods?: string[];
+  wppNumber?: string;
+}
+export const updateBusinessFn = async (business: BusinessDto) => {
+  const token = localStorage.getItem("token");
+  const bererToken = `Bearer ${token}`;
+  return (
+    await Api.patch(
+      `/businesses/${business.id}`,
+      {
+        paymentMethods: business.paymentMethods,
+        deliveryMethods: business.deliveryMethods,
+        wppNumber: business.wppNumber,
+      },
+      { headers: { Authorization: bererToken } }
+    )
+  ).data as Business;
 };

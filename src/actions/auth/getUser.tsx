@@ -1,13 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Api } from "../Api";
-interface Business {
-  id: string;
-  name: string;
-  ownerId: string;
-  paymentMethods: string[];
-  deliveryMethods: string[];
-  wppNumber: string | null;
-}
+import { Business } from "../businesses/businessQueries";
+
 
 interface User {
   id: string;
@@ -30,3 +24,5 @@ export const getUser = () => {
     queryFn: getUserFn,
   });
 };
+
+

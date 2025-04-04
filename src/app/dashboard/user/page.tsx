@@ -7,7 +7,7 @@ import {
   CardTitle,
   ContentLayout,
 } from "@/components";
-import UserForm from "@/components/user/UserForm";
+import { BussinessForm } from "@/components/user/UserForm";
 
 export default function UserPage() {
   const { data, error } = getUser();
@@ -29,7 +29,7 @@ export default function UserPage() {
               <div>Email: {data.email}</div>
             </CardContent>
           </Card>
-          <UserForm />
+          <BussinessForm />
         </div>
       )}
     </ContentLayout>
