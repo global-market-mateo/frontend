@@ -1,35 +1,76 @@
-FROM node:18-alpine
+# Base image setup
+FROM node:18-alpine AS base
 
+#Install necessary packages
+RUN apk add --no-cache libc6-compat
+
+# Set the working directory
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+################
+# Dependencies #
+################
+FROM base AS dependencies
+
+COPY package.json ./
+COPY package-lock.json* ./
+
 RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i; \
-  # Allow install without lockfile, so example works even without Node.js installed locally
-  else echo "Warning: Lockfile not found. It is recommended to commit lockfiles to version control." && yarn install; \
+  if [ -f package-lock.json ]; then \
+    npm ci --legacy-peer-deps || { echo "Initialization failed"; exit 1; }; \
+  else \ 
+    npm install --legacy-peer-deps || { echo "npm install failed"; exit 1; }; \
   fi
 
-COPY src ./src
-COPY public ./public
-COPY next.config.mjs .
-COPY tsconfig.json .
-COPY tailwind.config.ts .
-COPY postcss.config.mjs .
-COPY components.json .
+################
+#    Build     #
+################
+FROM base AS build
 
-# Next.js collects completely anonymous telemetry data about general usage. Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line to disable telemetry at run time
-# ENV NEXT_TELEMETRY_DISABLED 1
+COPY --from=dependencies /app/node_modules ./node_modules
+COPY --from=dependencies /app/package-lock.json ./
+COPY . .
+COPY .env.prod .env
 
-# Note: Don't expose ports here, Compose will handle that for us
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Start Next.js in development mode based on the preferred package manager
-CMD \
-  if [ -f yarn.lock ]; then yarn dev; \
-  elif [ -f package-lock.json ]; then npm run dev; \
-  elif [ -f pnpm-lock.yaml ]; then pnpm dev; \
-  else npm run dev; \
+RUN \
+  if [ -f package-lock.json ]; then \
+    npm run build || { echo "Build failed"; exit 1; }; \
+  else \
+    echo "Lockfile not found during build stage." && exit 1; \
   fi
+
+
+################
+#    Target    #
+################
+FROM base AS target
+
+# Create necessary system user and group
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy necessary files from build stage
+COPY --from=build /app/public ./public
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/package-lock.json ./package-lock.json
+COPY --from=build /app/next.config.mjs ./next.config.mjs
+COPY --from=build /app/.env ./.env
+
+# Set the correct permission for prerender cache
+RUN mkdir -p .next
+RUN chown nextjs:nodejs .next
+
+# Copy Next.js build output
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/node_modules ./node_modules
+
+
+USER nextjs
+
+EXPOSE 3000
+ENV PORT=3000
+
+# Usar next start en lugar de node server.js
+CMD ["npx", "next", "start"]
