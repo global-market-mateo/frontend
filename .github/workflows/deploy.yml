@@ -88,7 +88,7 @@ jobs:
                       cat <<EOF > /opt/frontend/.env
                       NODE_ENV=production
                       PORT=3000 
-                      NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+                      NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
                       EOF
                       echo "Verificando .env:"
                       cat /opt/frontend/.env
