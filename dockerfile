@@ -31,11 +31,9 @@ COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=dependencies /app/package-lock.json ./
 COPY . .
 
-# Verificar que .env existe antes de copiarlo
-RUN test -f .env || { echo ".env file not found" >&2; exit 1; }
-COPY .env .env
-
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
 
 RUN \
   if [ -f package-lock.json ]; then \
@@ -58,7 +56,6 @@ COPY --from=build /app/public ./public
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/package-lock.json ./package-lock.json
 COPY --from=build /app/next.config.mjs ./next.config.mjs
-COPY --from=build /app/.env ./.env
 
 # Set the correct permission for prerender cache
 RUN mkdir -p .next
@@ -68,13 +65,11 @@ RUN chown nextjs:nodejs .next
 COPY --from=build /app/.next ./.next
 COPY --from=build /app/node_modules ./node_modules
 
-# Set proper permissions for .env
-RUN chown nextjs:nodejs .env
-
 USER nextjs
 
 EXPOSE 3000
 ENV PORT=3000
+ENV NODE_ENV=production
 
 # Usar next start en lugar de node server.js
 CMD ["npx", "next", "start"]
