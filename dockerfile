@@ -30,7 +30,7 @@ FROM base AS build
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=dependencies /app/package-lock.json ./
 COPY . .
-COPY .env.prod .env
+COPY .env .env
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
