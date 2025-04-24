@@ -25,9 +25,11 @@ jobs:
               run: |
                   echo "📁 Current directory structure:"
                   ls -la
+                  echo "Current directory: $(pwd)"
 
             - name: Create .env file
               run: |
+                  cd frontend
                   echo "NODE_ENV=production" > .env
                   echo "NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}" >> .env
                   echo "Created .env file with:"
@@ -48,8 +50,8 @@ jobs:
             - name: Build and Push Image
               uses: docker/build-push-action@v5
               with:
-                  context: .
-                  file: Dockerfile
+                  context: ./frontend
+                  file: ./frontend/Dockerfile
                   tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
                   push: true
                   cache-from: type=gha
