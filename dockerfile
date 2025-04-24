@@ -27,13 +27,16 @@ RUN \
 ################
 FROM base AS build
 
+# Define build args
+ARG NEXT_PUBLIC_BACKEND_URL
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=dependencies /app/package-lock.json ./
 COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
-ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
 
 RUN \
   if [ -f package-lock.json ]; then \
