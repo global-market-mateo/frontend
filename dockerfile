@@ -30,6 +30,9 @@ FROM base AS build
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=dependencies /app/package-lock.json ./
 COPY . .
+
+# Verificar que .env existe antes de copiarlo
+RUN test -f .env || { echo ".env file not found" >&2; exit 1; }
 COPY .env .env
 
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -40,7 +43,6 @@ RUN \
   else \
     echo "Lockfile not found during build stage." && exit 1; \
   fi
-
 
 ################
 #    Target    #
@@ -66,6 +68,8 @@ RUN chown nextjs:nodejs .next
 COPY --from=build /app/.next ./.next
 COPY --from=build /app/node_modules ./node_modules
 
+# Set proper permissions for .env
+RUN chown nextjs:nodejs .env
 
 USER nextjs
 
