@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { Button } from './ui/button'
 import { useCategories } from '@/actions/category/categoryQueries'
 import { useCreateCategory } from '@/actions/category/categoryMutations'
+import { countries } from '../../utils/countries'
 
 export const MyFormItem = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
 	field,
@@ -23,7 +24,7 @@ export const MyFormItem = <TFieldValues extends FieldValues = FieldValues, TName
 }) => {
 	const [newCategory, setNewCategory] = useState('')
 	const [showNewCategoryInput, setShowNewCategoryInput] = useState(false)
-	const { data: categories } = useCategories()
+	const { data: categories } = field.name === 'categoryId' ? useCategories() : { data: undefined }
 	const { mutate: create } = useCreateCategory()
 
 	if (field.name === 'pay_method') {
@@ -125,6 +126,25 @@ export const MyFormItem = <TFieldValues extends FieldValues = FieldValues, TName
 				</FormItem>
 			)
 		}
+	}
+	if (field.name === 'country') {
+		return (
+			<FormItem>
+				<FormLabel>{label}</FormLabel>
+				<Select>
+					<SelectTrigger>
+						<SelectValue placeholder="[seleccione]" />
+					</SelectTrigger>
+					<SelectContent>
+						{countries.map((country) => (
+							<SelectItem key={country.code} value={country.code}>
+								{country.name}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			</FormItem>
+		)
 	}
 	return (
 		<FormItem>

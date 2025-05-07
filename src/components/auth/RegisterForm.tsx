@@ -6,6 +6,9 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { MyFormItem } from '@/components/MyFormItem'
 import { useRegister } from '@/actions/auth/useRegister'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from '@/hooks/use-toast'
 
 const RegisterSchema = z.object({
 	name: z.string().min(1, 'El campo debe tener al menos 1 carácter.'),
@@ -25,8 +28,8 @@ const RegisterSchema = z.object({
 export type RegisterSchemaType = z.infer<typeof RegisterSchema>
 
 export const RegisterForm = () => {
-	const { mutate: register, isError } = useRegister()
-
+	const { mutate: register, isError, isSuccess } = useRegister()
+	const router = useRouter()
 	const form = useForm<RegisterSchemaType>({
 		resolver: zodResolver(RegisterSchema),
 		defaultValues: {
@@ -37,6 +40,16 @@ export const RegisterForm = () => {
 	const onSubmit = (data) => {
 		register(data)
 	}
+
+	useEffect(() => {
+		if (isSuccess) {
+			router.push('/login')
+			toast({
+				title: 'Registro exitoso',
+				description: 'Ahora puedes iniciar sesión'
+			})
+		}
+	}, [isSuccess])
 
 	return (
 		<Form {...form}>

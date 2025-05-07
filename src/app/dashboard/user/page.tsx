@@ -1,6 +1,5 @@
 'use client'
 import { useGetUser } from '@/actions/auth/getUser'
-import { BussinessForm } from '@/components/user/UserForm'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ContentLayout } from '@/components/admin-panel/content-layout'
 
@@ -12,19 +11,18 @@ export default function UserPage() {
 	}
 
 	return (
-		<ContentLayout title="Usuario / Negocio">
+		<ContentLayout title="Bussiness configuration">
 			{data && (
 				<div className="flex flex-col gap-4">
 					<Card>
 						<CardHeader>
-							<CardTitle>Usuario</CardTitle>
+							<CardTitle>User</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div>Nombre: {data.name}</div>
+							<div>Name: {data.name}</div>
 							<div>Email: {data.email}</div>
 						</CardContent>
 					</Card>
-					<BussinessForm />
 				</div>
 			)}
 		</ContentLayout>
