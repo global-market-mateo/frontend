@@ -2,7 +2,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
-import { sendMessage } from './SendMessage'
 import { useCartStore } from '@/stores/useCartStore'
 import { useStore } from '@/hooks/use-store'
 import { Form, FormField } from '@/components/ui/form'
@@ -10,6 +9,7 @@ import { MyFormItem } from '@/components/MyFormItem'
 import { z } from 'zod'
 import { useCreateOrder } from '@/actions/orders/orderMutations'
 import { Button } from '@/components/ui/button'
+import { useSendMessage } from './SendMessage'
 
 export const formOrderSchema = z.object({
 	name: z.string().min(5, 'Ingrea nombre completo').max(50),
@@ -39,6 +39,14 @@ export const OrderForm = ({ businessName }: { businessName: string }) => {
 	})
 	const cart = useStore(useCartStore, (state) => state.cart)
 	const total = useStore(useCartStore, (state) => state.totalPrice)
+	const { sendMessage } = useSendMessage({
+		infoOrder: form.getValues(),
+		cart: cart!,
+		totalPrice: total!,
+		IdOrder: data?.id || '',
+		businessName
+	})
+
 	const onSubmit = async (values: Order) => {
 		const { address, delivery_method, name, pay_method, floor, references } = values
 		create({
@@ -62,17 +70,12 @@ export const OrderForm = ({ businessName }: { businessName: string }) => {
 			}
 		})
 	}
+
 	useEffect(() => {
-		if (isSuccess) {
-			sendMessage({
-				infoOrder: form.getValues(),
-				cart: cart!,
-				totalPrice: total!,
-				IdOrder: data!.id,
-				businessName
-			})
+		if (isSuccess && data?.id) {
+			sendMessage()
 		}
-	}, [isSuccess, businessName, cart, data, form, total])
+	}, [isSuccess, data?.id, sendMessage])
 
 	return (
 		<div className="flex flex-col gap-4 md:w-2/5 max-md:w-full max-md:px-6">
@@ -80,9 +83,10 @@ export const OrderForm = ({ businessName }: { businessName: string }) => {
 				<form onSubmit={form.handleSubmit(onSubmit)} onError={(error) => console.log(error)} className="space-y-8">
 					<FormField control={form.control} name="name" render={({ field }) => <MyFormItem field={field} label="Nombre y apellido" />} />
 
-					<FormField control={form.control} name="delivery_method" render={({ field }) => <MyFormItem field={field} setDeliveryMethod={setDeliveryMethod} />} />
+					<FormField control={form.control} name="delivery_method" render={({ field }) => <MyFormItem field={field} setDeliveryMethod={setDeliveryMethod} businessName={businessName} />} />
 					{deliveryMethod === 'envio' && (
 						<>
+							{/* Todo: agregar el costo del envio */}
 							<p>Costo del envio $1000 (puede variar dependiendo de la distancia)</p>
 							<FormField control={form.control} name="address" render={({ field }) => <MyFormItem field={field} label="Direccion y calle" />} />
 							<FormField control={form.control} name="floor" render={({ field }) => <MyFormItem field={field} label="Piso / Departamento" />} />
@@ -90,7 +94,7 @@ export const OrderForm = ({ businessName }: { businessName: string }) => {
 						</>
 					)}
 
-					<FormField control={form.control} name="pay_method" render={({ field }) => <MyFormItem field={field} label="Forma de pago" />} />
+					<FormField control={form.control} name="pay_method" render={({ field }) => <MyFormItem field={field} label="Forma de pago" businessName={businessName} />} />
 					<Button type="submit">Realizar pedido</Button>
 					{/* <DevTool control={form.control} /> */}
 				</form>

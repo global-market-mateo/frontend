@@ -5,10 +5,10 @@ import { ColumnDef, FilterFn, Row } from '@tanstack/react-table'
 import Image from 'next/image'
 import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useDeleteBusinessProduct } from '@/actions/businessProducts/businessProductsMutations'
+import { useDeleteBusinessProduct } from '@/actions/businesses/businessProducts/businessProductsMutations'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { BusinessProduct } from '@/actions/businessProducts/businessProductsService'
+import { BusinessProduct } from '@/actions/businesses/businessProducts/businessProductsService'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.

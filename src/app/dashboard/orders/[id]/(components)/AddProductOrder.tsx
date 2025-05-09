@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { CirclePlus } from 'lucide-react'
 import { Order } from '@/actions/orders/orderService'
 import { useUpdateOrder } from '@/actions/orders/orderMutations'
-import { useSearchBusinessProducts } from '@/actions/businessProducts/businessProductsQueries'
+import { useGetPublicProductsBusiness } from '@/actions/businesses/businessQueries'
 
 const formSchema = z.object({
 	title: z.string().min(2, { message: 'La busqueda debe tener al menos 2 caracteres' })
@@ -21,7 +21,7 @@ export const AddProductOrder = ({ order }: Prop) => {
 	const { mutate } = useUpdateOrder(order.id)
 
 	const [search, setSearch] = useState('coca')
-	const { data } = useSearchBusinessProducts(search)
+	const { data } = useGetPublicProductsBusiness({ businessName: 'coca', category: search })
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -72,7 +72,7 @@ export const AddProductOrder = ({ order }: Prop) => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{data?.map(({ id, amount, price, brand, category, tipo, description }) => (
+					{data?.data?.map(({ id, amount, price, brand, category, tipo, description }) => (
 						<TableRow key={id}>
 							<TableCell className="font-medium">{`${tipo} ${brand} ${amount}`}</TableCell>
 							<TableCell>{price}</TableCell>

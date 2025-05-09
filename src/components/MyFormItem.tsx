@@ -8,20 +8,19 @@ import { Button } from './ui/button'
 import { useCategories } from '@/actions/category/categoryQueries'
 import { useCreateCategory } from '@/actions/category/categoryMutations'
 import { countries } from '../../utils/countries'
+import { useGetBusinessByName } from '@/actions/businesses/businessQueries'
 
-export const MyFormItem = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
-	field,
-	label,
-	placeholder,
-	setDeliveryMethod,
-	type = 'text'
-}: {
+interface MyFormItemProps {
 	type?: React.HTMLInputTypeAttribute
-	field: ControllerRenderProps<TFieldValues, TName>
+	field: ControllerRenderProps<FieldValues, FieldPath<FieldValues>>
 	label?: string
 	placeholder?: string
 	setDeliveryMethod?: (value: string) => void
-}) => {
+	businessName?: string
+}
+
+export const MyFormItem = ({ field, label, placeholder, setDeliveryMethod, type = 'text', businessName }: MyFormItemProps) => {
+	const { data: business } = useGetBusinessByName(businessName)
 	const [newCategory, setNewCategory] = useState('')
 	const [showNewCategoryInput, setShowNewCategoryInput] = useState(false)
 	const { data: categories } = field.name === 'categoryId' ? useCategories() : { data: undefined }
@@ -36,11 +35,11 @@ export const MyFormItem = <TFieldValues extends FieldValues = FieldValues, TName
 						<SelectValue placeholder="[seleccione]" />
 					</SelectTrigger>
 					<SelectContent>
-						<SelectItem value="Efectivo">En efectivo en el momento de la entrega</SelectItem>
-						<SelectItem value="Transferencia">Transferencia bancaria</SelectItem>
-						<SelectItem value="Mercado pago">Link de mercado pago</SelectItem>
-						<SelectItem value="Tarjeta de debito">Tarjeta de debito</SelectItem>
-						<SelectItem value="Tarjeta de credito">Tarjeta de credito(12% recargo)</SelectItem>
+						{business?.paymentMethods.map((paymentMethod) => (
+							<SelectItem key={paymentMethod} value={paymentMethod}>
+								{paymentMethod}
+							</SelectItem>
+						))}
 					</SelectContent>
 				</Select>
 			</FormItem>
@@ -62,9 +61,11 @@ export const MyFormItem = <TFieldValues extends FieldValues = FieldValues, TName
 						<SelectValue placeholder="[seleccione]" />
 					</SelectTrigger>
 					<SelectContent>
-						<SelectItem value="Av.Revolucion">Retiro en Av.Revolución de Mayo 1510</SelectItem>
-						<SelectItem value="Lima">Retiro en Lima 1109</SelectItem>
-						<SelectItem value="envio">Necesito que me lo envien</SelectItem>
+						{business?.deliveryMethods.map((deliveryMethod) => (
+							<SelectItem key={deliveryMethod} value={deliveryMethod}>
+								{deliveryMethod}
+							</SelectItem>
+						))}
 					</SelectContent>
 				</Select>
 			</FormItem>
@@ -131,9 +132,9 @@ export const MyFormItem = <TFieldValues extends FieldValues = FieldValues, TName
 		return (
 			<FormItem>
 				<FormLabel>{label}</FormLabel>
-				<Select>
+				<Select onValueChange={field.onChange} value={field.value}>
 					<SelectTrigger>
-						<SelectValue placeholder="[seleccione]" />
+						<SelectValue placeholder="[seleccione]">{field.value && countries.find((c) => c.code === field.value)?.name}</SelectValue>
 					</SelectTrigger>
 					<SelectContent>
 						{countries.map((country) => (

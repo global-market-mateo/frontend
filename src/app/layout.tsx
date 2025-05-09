@@ -1,23 +1,23 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import Providers from "@/components/providers/Providers";
-import { GeistSans } from "geist/font/sans";
+import type { Metadata } from 'next'
+import './globals.css'
+import Providers from '@/components/providers/Providers'
+import { GeistSans } from 'geist/font/sans'
 
 export const metadata: Metadata = {
-  title: "Global Market",
-  description: "Global Market",
-};
+	title: 'Global Market',
+	description: 'Global Market'
+}
 
 export default function RootLayout({
-  children,
+	children
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode
 }>) {
-  return (
-    <html lang="es">
-      <body className={GeistSans.className}>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
-  );
+	return (
+		<html lang="es" suppressHydrationWarning>
+			<body className={GeistSans.className} suppressHydrationWarning>
+				<Providers>{children}</Providers>
+			</body>
+		</html>
+	)
 }

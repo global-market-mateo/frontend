@@ -1,9 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { getBusinessByIdFn, getBusinessFn, getCategriesBusinessFn, getPublicProductsBusinessFn, getPublicProductsBusinessFnInterface, updateBusinessFn } from './businessService'
-import { UUID } from 'crypto'
+import { getBusinessByNameFn, getBusinessFn, getCategriesBusinessFn, getPublicProductsBusinessFn, getPublicProductsBusinessFnInterface, updateBusinessFn } from './businessService'
 import { toast } from '@/hooks/use-toast'
 export const BusinessesKey = 'businesses'
-
+export const BusinessLocationKey = 'businessLocation'
 export interface Business {
 	id: string
 	name: string
@@ -11,6 +10,15 @@ export interface Business {
 	paymentMethods: string[]
 	deliveryMethods: string[]
 	wppNumber: string | null
+	location: {
+		country: string
+		city: string
+		street: string
+		number: string
+		department: string | null
+		postalCode: string
+		district: string | null
+	}
 }
 
 export const useBusinesses = () =>
@@ -19,10 +27,10 @@ export const useBusinesses = () =>
 		queryFn: getBusinessFn
 	})
 
-export const useGetBusinessById = (businessId: UUID) =>
+export const useGetBusinessByName = (businessName: string) =>
 	useQuery({
-		queryKey: [businessId, BusinessesKey],
-		queryFn: () => getBusinessByIdFn(businessId)
+		queryKey: [businessName, BusinessesKey],
+		queryFn: () => getBusinessByNameFn(businessName)
 	})
 
 export const useCategoriesBusiness = (businessName: string) =>

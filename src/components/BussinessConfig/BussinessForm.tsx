@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { Checkbox } from '../ui/checkbox'
 import { useGetUser } from '@/actions/auth/getUser'
 import { useUpdateBusiness } from '@/actions/businesses/businessQueries'
+import { WppNumberForm } from './WppNumberForm'
 const paymentMethods = {
 	CASH: 'Efectivo',
 	CREDIT_CARD: 'Tarjeta de credito',

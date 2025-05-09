@@ -1,4 +1,4 @@
-import { Tag, Users, Settings, Bookmark, SquarePen, LayoutGrid, LucideIcon } from 'lucide-react'
+import { Tag, Users, Settings, Bookmark, SquarePen, LayoutGrid, LucideIcon, MapPin } from 'lucide-react'
 
 type Submenu = {
 	href: string
@@ -33,11 +33,11 @@ export function getMenuList(pathname: string): Group[] {
 			]
 		},
 		{
-			groupLabel: 'Contents',
+			groupLabel: 'Contenido',
 			menus: [
 				{
 					href: '',
-					label: 'Products',
+					label: 'Productos',
 					icon: SquarePen,
 					submenus: [
 						{
@@ -73,18 +73,17 @@ export function getMenuList(pathname: string): Group[] {
 			]
 		},
 		{
-			groupLabel: 'Settings',
+			groupLabel: 'Configuración',
 			menus: [
 				{
 					href: '/dashboard/business',
-					label: 'Business configuration',
+					label: 'Negocio',
 					icon: Users
-					// submenus: [
-					// 	{
-					// 		href: '/dashboard/user',
-					// 		label: 'Business configuration'
-					// 	}
-					// ]
+				},
+				{
+					href: '/dashboard/business/location',
+					label: 'Ubicación',
+					icon: MapPin
 				}
 			]
 		}

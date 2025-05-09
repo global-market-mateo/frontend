@@ -20,8 +20,8 @@ import TableComponent from './TableComponent'
 
 import { ProductSheet } from './ProductSheet'
 import { PaginationComponent } from '../PaginationComponent'
-import { BusinessProduct, getBusinessProductsFn } from '@/actions/businessProducts/businessProductsService'
-import { BusinessProductskey } from '@/actions/businessProducts/businessProductsMutations'
+import { BusinessProduct, getBusinessProductsFn } from '@/actions/businesses/businessProducts/businessProductsService'
+import { BusinessProductskey } from '@/actions/businesses/businessProducts/businessProductsMutations'
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]

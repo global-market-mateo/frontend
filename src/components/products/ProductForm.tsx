@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { MyFormItem } from '@/components/MyFormItem'
-import { useCreateBusinessProduct, useUpdateBusinessProduct } from '@/actions/businessProducts/businessProductsMutations'
+import { useCreateBusinessProduct, useUpdateBusinessProduct } from '@/actions/businesses/businessProducts/businessProductsMutations'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 
