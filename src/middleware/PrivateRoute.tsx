@@ -24,34 +24,21 @@ export default function PrivateRoute({ children }) {
 	useEffect(() => {
 		const verifyToken = async () => {
 			const token = localStorage.getItem('token')
-			const isValid = token ? await getToken(token) : false
 
-			if (isValid) {
-				// Usuario autenticado
-				if (pathname === '/login') {
-					// Redirige al dashboard si intenta acceder a /login estando autenticado
-					router.push('/dashboard')
-				} else if (pathname === '/dashboard') {
-					// Permitir acceso a /dashboard si está autenticado
-					setLoading(false)
-				} else {
-					// Permitir el acceso a todas las demás rutas
-					setLoading(false)
-				}
-			} else {
-				// Usuario no autenticado
-				if (pathname === '/dashboard') {
-					// Redirige a /login si intenta acceder a /dashboard
+			if (pathname === '/dashboard') {
+				const isValid = token ? await getToken(token) : false
+
+				if (!isValid) {
 					router.push('/login')
-				} else {
-					// Permitir el acceso a otras rutas no protegidas
-					setLoading(false)
+					return
 				}
 			}
+
+			setLoading(false)
 		}
 
 		verifyToken()
-	}, [router, pathname])
+	}, [pathname, router])
 
 	if (loading) {
 		return <Loading />

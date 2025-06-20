@@ -49,7 +49,7 @@ export const RegisterForm = () => {
 				description: 'Ahora puedes iniciar sesión'
 			})
 		}
-	}, [isSuccess])
+	}, [isSuccess, router])
 
 	return (
 		<Form {...form}>

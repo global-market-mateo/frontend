@@ -20,13 +20,20 @@ interface MyFormItemProps {
 }
 
 export const MyFormItem = ({ field, label, placeholder, setDeliveryMethod, type = 'text', businessName }: MyFormItemProps) => {
-	const { data: business } = useGetBusinessByName(businessName)
+	const { data: business } = useGetBusinessByName(businessName || '')
 	const [newCategory, setNewCategory] = useState('')
 	const [showNewCategoryInput, setShowNewCategoryInput] = useState(false)
-	const { data: categories } = field.name === 'categoryId' ? useCategories() : { data: undefined }
+	const { data: categories } = useCategories()
 	const { mutate: create } = useCreateCategory()
 
+	const shouldShowCategories = field.name === 'categoryId' && categories?.length > 0
+	const hasPaymentMethods = business?.paymentMethods?.length > 0
+	const hasDeliveryMethods = business?.deliveryMethods?.length > 0
+
 	if (field.name === 'pay_method') {
+		if (!hasPaymentMethods) {
+			return null
+		}
 		return (
 			<FormItem>
 				<FormLabel>Forma de pago</FormLabel>
@@ -35,7 +42,7 @@ export const MyFormItem = ({ field, label, placeholder, setDeliveryMethod, type 
 						<SelectValue placeholder="[seleccione]" />
 					</SelectTrigger>
 					<SelectContent>
-						{business?.paymentMethods.map((paymentMethod) => (
+						{business.paymentMethods.map((paymentMethod) => (
 							<SelectItem key={paymentMethod} value={paymentMethod}>
 								{paymentMethod}
 							</SelectItem>
@@ -47,6 +54,9 @@ export const MyFormItem = ({ field, label, placeholder, setDeliveryMethod, type 
 	}
 
 	if (field.name === 'delivery_method') {
+		if (!hasDeliveryMethods) {
+			return null
+		}
 		return (
 			<FormItem>
 				<FormLabel>Forma de entrega</FormLabel>
@@ -61,7 +71,7 @@ export const MyFormItem = ({ field, label, placeholder, setDeliveryMethod, type 
 						<SelectValue placeholder="[seleccione]" />
 					</SelectTrigger>
 					<SelectContent>
-						{business?.deliveryMethods.map((deliveryMethod) => (
+						{business.deliveryMethods.map((deliveryMethod) => (
 							<SelectItem key={deliveryMethod} value={deliveryMethod}>
 								{deliveryMethod}
 							</SelectItem>
@@ -73,61 +83,61 @@ export const MyFormItem = ({ field, label, placeholder, setDeliveryMethod, type 
 	}
 
 	if (field.name === 'categoryId') {
-		if (categories) {
-			return (
-				<FormItem>
-					<FormLabel>Categoria</FormLabel>
-					<Select
-						onValueChange={(value) => {
-							if (value === 'new') {
-								setShowNewCategoryInput(true)
-							} else {
-								setShowNewCategoryInput(false)
-								field.onChange(value)
-							}
-						}}
-						defaultValue={field.value}
-					>
-						<SelectTrigger>
-							<SelectValue placeholder="[seleccione]" />
-						</SelectTrigger>
-						<SelectContent>
-							{categories.map((category) => (
-								<SelectItem key={category.id} value={category.id}>
-									{category.name}
-								</SelectItem>
-							))}
-							<SelectItem key="new" value="new">
-								Agregar nueva categoría
-							</SelectItem>
-						</SelectContent>
-					</Select>
-
-					{showNewCategoryInput && (
-						<div className="mt-2">
-							<Input type="text" placeholder="Nombre de nueva categoría" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} />
-							<div className="flex justify-end gap-2 mt-2">
-								<Button
-									size="sm"
-									onClick={() => {
-										create(newCategory)
-										// Aquí agregarías la lógica para guardar la nueva categoría
-										// Por ejemplo, llamar a una API y luego actualizar la lista de categorías
-										setShowNewCategoryInput(false)
-									}}
-								>
-									Guardar
-								</Button>
-								<Button size="sm" variant="outline" onClick={() => setShowNewCategoryInput(false)}>
-									Cancelar
-								</Button>
-							</div>
-						</div>
-					)}
-				</FormItem>
-			)
+		if (!shouldShowCategories) {
+			return null
 		}
+		return (
+			<FormItem>
+				<FormLabel>Categoria</FormLabel>
+				<Select
+					onValueChange={(value) => {
+						if (value === 'new') {
+							setShowNewCategoryInput(true)
+						} else {
+							setShowNewCategoryInput(false)
+							field.onChange(value)
+						}
+					}}
+					defaultValue={field.value}
+				>
+					<SelectTrigger>
+						<SelectValue placeholder="[seleccione]" />
+					</SelectTrigger>
+					<SelectContent>
+						{categories.map((category) => (
+							<SelectItem key={category.id} value={category.id}>
+								{category.name}
+							</SelectItem>
+						))}
+						<SelectItem key="new" value="new">
+							Agregar nueva categoría
+						</SelectItem>
+					</SelectContent>
+				</Select>
+
+				{showNewCategoryInput && (
+					<div className="mt-2">
+						<Input type="text" placeholder="Nombre de nueva categoría" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} />
+						<div className="flex justify-end gap-2 mt-2">
+							<Button
+								size="sm"
+								onClick={() => {
+									create(newCategory)
+									setShowNewCategoryInput(false)
+								}}
+							>
+								Guardar
+							</Button>
+							<Button size="sm" variant="outline" onClick={() => setShowNewCategoryInput(false)}>
+								Cancelar
+							</Button>
+						</div>
+					</div>
+				)}
+			</FormItem>
+		)
 	}
+
 	if (field.name === 'country') {
 		return (
 			<FormItem>
@@ -147,13 +157,13 @@ export const MyFormItem = ({ field, label, placeholder, setDeliveryMethod, type 
 			</FormItem>
 		)
 	}
+
 	return (
 		<FormItem>
 			<FormLabel>{label}</FormLabel>
 			<FormControl>
 				<Input type={type} placeholder={placeholder} {...field} />
 			</FormControl>
-			{/* <FormDescription>This is your public display name.</FormDescription> */}
 			<FormMessage />
 		</FormItem>
 	)

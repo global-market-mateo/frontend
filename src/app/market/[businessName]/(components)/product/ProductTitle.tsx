@@ -9,8 +9,12 @@ interface Props {
 }
 
 export const ProductTitle: FC<Props> = ({ amount, brand, description, tipo, className }) => {
+	if (!tipo || !description || !amount || !brand) {
+		return null
+	}
+
 	return (
-		<p className={`${className} text-base font-semibold mb-2  md:text-xl line-clamp-2`}>
+		<p className={`${className || ''} text-base font-semibold mb-2  md:text-xl line-clamp-2`}>
 			<span className="capitalize">{tipo}</span> {description} <span className="capitalize">{brand} </span>
 			{amount}
 		</p>

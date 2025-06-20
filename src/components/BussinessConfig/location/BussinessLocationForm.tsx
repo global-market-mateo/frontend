@@ -24,11 +24,6 @@ export const BussinessLocationForm = ({ data }: { data?: BusinessLocation }) => 
 	const { error } = useGetUser()
 	const { mutate: createBusinessLocation } = useCreateBusinessLocation()
 	const { mutate: updateBusinessLocation } = useUpdateBusinessLocation()
-
-	if (error) {
-		return <div>Error loading user data</div>
-	}
-
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -61,6 +56,10 @@ export const BussinessLocationForm = ({ data }: { data?: BusinessLocation }) => 
 		}
 	}, [data, form])
 
+	if (error) {
+		return <div>Error loading user data</div>
+	}
+
 	const onSubmit = (values: z.infer<typeof schema>) => {
 		const location = {
 			country: values.country,
@@ -77,6 +76,7 @@ export const BussinessLocationForm = ({ data }: { data?: BusinessLocation }) => 
 			createBusinessLocation(location)
 		}
 	}
+
 	return (
 		<Card>
 			<CardHeader>

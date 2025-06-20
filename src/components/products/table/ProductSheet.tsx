@@ -1,6 +1,6 @@
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
 import { ProductForm } from '../ProductForm'
-import { BusinessProduct } from '@/actions/businessProducts/businessProductsService'
+import { BusinessProduct } from '@/actions/businesses/businessProducts/businessProductsService'
 import { GeneralProduct } from '@/actions/generalProducts/getGeneralProducts'
 
 interface ProductSheetProps {

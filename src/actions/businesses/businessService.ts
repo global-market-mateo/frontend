@@ -24,18 +24,28 @@ export const getBusinessFn = async (): Promise<BusinessResponse[]> => {
 	const response = await Api.get('/businesses')
 	return response.data
 }
+
 export const getBusinessByNameFn = async (businessName: string): Promise<BusinessResponse> => {
-	const response = await Api.get(`/${businessName}`)
+	if (!businessName) {
+		throw new Error('Business name is required')
+	}
+	const response = await Api.get(`/businesses/${businessName}`)
 	return response.data
 }
 
 export const getCategriesBusinessFn = async (businessName: string): Promise<{ name: string; id: string }[]> => {
-	const response = await Api.get(`/${businessName}/categories`)
+	if (!businessName) {
+		throw new Error('Business name is required')
+	}
+	const response = await Api.get(`/businesses/${businessName}/categories`)
 	return response.data
 }
 
 export const getPublicProductsBusinessFn = async ({ businessName, category }: getPublicProductsBusinessFnInterface): Promise<BusinessProductResponse> => {
-	const response = await Api.get(`/${businessName}/products/${category ? category : ''}`)
+	if (!businessName) {
+		throw new Error('Business name is required')
+	}
+	const response = await Api.get(`/businesses/${businessName}/products/${category ? category : ''}`)
 	return response.data
 }
 

@@ -88,31 +88,31 @@ export const WppNumberForm = () => {
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(UserSchema),
-		defaultValues: parsePhoneNumber(data?.businesses[0].wppNumber)
+		defaultValues: parsePhoneNumber(data?.businesses[0]?.wppNumber)
 	})
 
 	useEffect(() => {
-		setIsEditing(!data?.businesses[0].wppNumber)
-	}, [data?.businesses[0].wppNumber])
+		setIsEditing(!data?.businesses[0]?.wppNumber)
+	}, [data?.businesses])
 
 	useEffect(() => {
-		if (data?.businesses[0].wppNumber !== undefined) {
+		if (data?.businesses[0]?.wppNumber !== undefined) {
 			const values = parsePhoneNumber(data.businesses[0].wppNumber)
 			form.setValue('countryCode', values.countryCode)
 			form.setValue('phoneNumber', values.phoneNumber)
 		}
-	}, [data?.businesses[0].wppNumber, form])
+	}, [data?.businesses, form])
+
+	if (error) return <div>Error loading user data</div>
 
 	const handleSubmit = (values: FormValues) => {
 		const fullNumber = `${values.countryCode}-${values.phoneNumber}`
 		update({
-			id: data?.businesses[0].id,
+			id: data?.businesses[0]?.id,
 			wppNumber: fullNumber || null
 		})
 		setIsEditing(false)
 	}
-
-	if (error) return <div>Error loading user data</div>
 
 	return (
 		<Card>
@@ -125,7 +125,7 @@ export const WppNumberForm = () => {
 						<div className="flex justify-between items-center">
 							<div>
 								<FormLabel>Whatsapp</FormLabel>
-								<p className="text-sm text-gray-500">{data?.businesses[0].wppNumber || 'No hay número registrado'}</p>
+								<p className="text-sm text-gray-500">{data?.businesses[0]?.wppNumber || 'No hay número registrado'}</p>
 							</div>
 							<Button onClick={() => setIsEditing(true)}>Editar</Button>
 						</div>
@@ -140,7 +140,7 @@ export const WppNumberForm = () => {
 								/>
 							</div>
 							<div className="flex justify-end gap-2">
-								{data?.businesses[0].wppNumber && (
+								{data?.businesses[0]?.wppNumber && (
 									<Button type="button" variant="outline" onClick={() => setIsEditing(false)}>
 										Cancelar
 									</Button>

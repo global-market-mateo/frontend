@@ -5,8 +5,23 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 // import { AddCartButton } from "../cart/AddCartButton";
 
-export const ProductItem = (item: any) => {
+interface ProductItemProps {
+	tipo: string
+	price: number
+	description: string
+	brand: string
+	amount: string
+	url?: string
+	id: string
+}
+
+export const ProductItem = (item: ProductItemProps) => {
 	const { tipo, price, description, brand, amount, url } = item
+
+	if (!tipo || !price || !description || !brand || !amount) {
+		return null
+	}
+
 	return (
 		<div className="w-[130px] md:w-[200px] h-[300px] md:h-[320px] border border-black rounded-lg shadow-md p-2 bg-card flex flex-col justify-between">
 			<div className="relative w-full  mb-4 flex justify-center items-center">
@@ -27,7 +42,7 @@ export const ProductItem = (item: any) => {
 
 						<ProductTitle amount={amount} brand={brand} description={description} tipo={tipo} className={'max-md:justify-center'} />
 						{/* <Quantity id={item.id} /> */}
-						<AddCartButton product={{ ...item }} />
+						<AddCartButton product={item} />
 					</DialogContent>
 				</Dialog>
 			</div>
