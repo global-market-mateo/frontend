@@ -1,12 +1,12 @@
 'use client'
 
-import { useDeleteCategory } from '@/actions/category/categoryMutations'
-import { useCategories } from '@/actions/category/categoryQueries'
-import { Category } from '@/actions/category/categoryService'
-import { ContentLayout } from '@/components/admin-panel/content-layout'
-import { CategoryForm } from '@/components/category/CategoryForm'
-import { CategorySheet } from '@/components/category/CategorySheet'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { useDeleteCategory } from '@/resources/category/services/category-mutations'
+import { useCategories } from '@/resources/category/services/category-queries'
+import { Category } from '@/resources/category/services/category-service'
+import { ContentLayout } from '@/resources/admin-panel/content-layout'
+import { CategoryForm } from '@/resources/category/components/category-form'
+import { CategorySheet } from '@/resources/category/components/category-sheet'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/resources/shared/ui/table'
 import { useState } from 'react'
 
 export default function CategoryPage() {

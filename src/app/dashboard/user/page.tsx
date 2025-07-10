@@ -1,7 +1,7 @@
 'use client'
-import { useGetUser } from '@/actions/auth/getUser'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ContentLayout } from '@/components/admin-panel/content-layout'
+import { useGetUser } from '@/resources/auth/services/get-user'
+import { Card, CardContent, CardHeader, CardTitle } from '@/resources/shared/ui/card'
+import { ContentLayout } from '@/resources/admin-panel/content-layout'
 
 export default function UserPage() {
 	const { data, error } = useGetUser()

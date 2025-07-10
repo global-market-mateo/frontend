@@ -1,7 +1,7 @@
 'use client'
 
-import { ContentLayout } from '@/components/admin-panel/content-layout'
-import { ProductForm } from '@/components/products/ProductForm'
+import { ContentLayout } from '@/resources/admin-panel/content-layout'
+import { ProductForm } from '@/resources/general-products/components/product-form'
 
 export default function NewProductPage() {
 	return (

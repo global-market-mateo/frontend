@@ -1,7 +1,7 @@
 'use client'
-import { useGetOrders } from '@/actions/orders/orderQueries'
-import { ContentLayout } from '@/components/admin-panel/content-layout'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { useGetOrders } from '@/resources/orders/services/order-queries'
+import { ContentLayout } from '@/resources/admin-panel/content-layout'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/resources/shared/ui/table'
 import { useRouter } from 'next/navigation'
 
 export default function OrderPage() {

@@ -1,7 +1,7 @@
 'use client'
 
-import { useCategoriesBusiness } from '@/actions/businesses/businessQueries'
-import { ProductsCarrousel } from '../(components)/product/ProductsCarrousel'
+import { useCategoriesBusiness } from '@/resources/business/services/business-queries'
+import { ProductsCarrousel } from '@/resources/products/components/products-carrousel'
 
 export default function BusinessPage({ params }: { params: { businessName: string } }) {
 	const { data: categories } = useCategoriesBusiness(params.businessName)

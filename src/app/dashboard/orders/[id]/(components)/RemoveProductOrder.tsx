@@ -1,5 +1,5 @@
-import { useUpdateOrder } from '@/actions/orders/orderMutations'
-import { Order } from '@/actions/orders/orderService'
+import { useUpdateOrder } from '@/resources/orders/orderMutations'
+import { Order } from '@/resources/orders/orderService'
 import { Button } from '@/components/ui/button'
 import { Trash2 } from 'lucide-react'
 

@@ -1,9 +1,9 @@
 'use client'
 
-import { useGetOrderByid } from '@/actions/orders/orderQueries'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { useGetOrderByid } from '@/resources/orders/services/order-queries'
+import { Badge } from '@/resources/shared/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/resources/shared/ui/card'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/resources/shared/ui/table'
 
 export default function PedidoIdPage({ params: { id } }: { params: { id: string } }) {
 	const { data: order } = useGetOrderByid({ id })

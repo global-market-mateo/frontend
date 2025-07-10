@@ -1,6 +1,6 @@
 'use client'
 
-import { ProductsGrid } from '../../(components)/product/ProductsGrid'
+import { ProductsGrid } from '@/resources/products/components/products-grid'
 
 interface Prop {
 	params: {

@@ -1,8 +1,8 @@
 'use client'
-import { useGetUser } from '@/actions/auth/getUser'
-import { ContentLayout } from '@/components/admin-panel/content-layout'
-import { BussinessForm } from '@/components/BussinessConfig/BussinessForm'
-import { WppNumberForm } from '@/components/BussinessConfig/WppNumberForm'
+import { useGetUser } from '@/resources/auth/services/get-user'
+import { ContentLayout } from '@/resources/admin-panel/content-layout'
+import { BussinessForm } from '@/resources/business/components/bussiness-form'
+import { WppNumberForm } from '@/resources/business/components/wpp-number-form'
 
 export default function BusinessPage() {
 	const { data, error } = useGetUser()

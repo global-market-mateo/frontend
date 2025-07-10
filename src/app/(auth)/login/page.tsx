@@ -1,5 +1,5 @@
 'use client'
-import { LoginForm } from '@/components/auth/LoginForm'
+import { LoginForm } from '@/resources/auth/components/login-form'
 import Link from 'next/link'
 
 export default function LoginPage() {

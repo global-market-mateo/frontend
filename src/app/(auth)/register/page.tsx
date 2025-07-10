@@ -1,5 +1,5 @@
 'use client'
-import { RegisterForm } from '@/components/auth/RegisterForm'
+import { RegisterForm } from '@/resources/auth/components/register-form'
 import Link from 'next/link'
 
 export default function RegisterPage() {

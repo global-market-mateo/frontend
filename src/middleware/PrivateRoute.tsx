@@ -2,43 +2,24 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { Api } from '@/actions/Api'
-import { Loading } from '@/components/Loading'
+import { Loading } from '@/resources/shared/components/loading'
+import { useIsAuthenticated } from '@/resources/auth/hooks/use-auth'
 
 export default function PrivateRoute({ children }) {
 	const [loading, setLoading] = useState(true)
 	const router = useRouter()
 	const pathname = usePathname()
-
-	const getToken = async (token: string) => {
-		try {
-			const res = await Api.get('/auth/token', {
-				headers: { Authorization: `Bearer ${token}` }
-			})
-			return res.status === 200
-		} catch (err) {
-			return false
-		}
-	}
+	const isAuthenticated = useIsAuthenticated()
 
 	useEffect(() => {
-		const verifyToken = async () => {
-			const token = localStorage.getItem('token')
-
-			if (pathname === '/dashboard') {
-				const isValid = token ? await getToken(token) : false
-
-				if (!isValid) {
-					router.push('/login')
-					return
-				}
-			}
-
-			setLoading(false)
+		// Si estamos en el dashboard y no hay token, redirigir a login
+		if (pathname === '/dashboard' && !isAuthenticated) {
+			router.push('/login')
+			return
 		}
 
-		verifyToken()
-	}, [pathname, router])
+		setLoading(false)
+	}, [pathname, router, isAuthenticated])
 
 	if (loading) {
 		return <Loading />

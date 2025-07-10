@@ -1,6 +1,6 @@
 'use client'
 
-import { TopMenu } from './(components)/ui/TopMenu'
+import { TopMenu } from '../../../resources/shared/components/top-menu'
 
 export default function RootLayout({ children, params }: { children: React.ReactNode; params: { businessName: string } }) {
 	return (

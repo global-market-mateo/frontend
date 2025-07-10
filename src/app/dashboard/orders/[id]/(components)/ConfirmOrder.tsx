@@ -1,4 +1,4 @@
-import { useUpdateOrder } from '@/actions/orders/orderMutations'
+import { useUpdateOrder } from '@/resources/orders/orderMutations'
 import { Button } from '@/components/ui/button'
 
 export const ConfirmOrder = ({ orderId }: { orderId: string }) => {

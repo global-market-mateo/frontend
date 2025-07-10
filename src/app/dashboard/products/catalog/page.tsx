@@ -1,13 +1,13 @@
 'use client'
 
-import { GeneralProduct, useGetGeneralProducts } from '@/actions/generalProducts/getGeneralProducts'
-import { ContentLayout } from '@/components/admin-panel/content-layout'
-import { CatalogoGrid } from '@/components/catalog/CatalogGrid'
-import { PaginationComponent } from '@/components/products/PaginationComponent'
-import { ProductsFilters } from '@/components/products/ProductsFilters'
-import { ProductSheet } from '@/components/products/table/ProductSheet'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { GeneralProduct, useGetGeneralProducts } from '@/resources/general-products/services/get-general-products'
+import { ContentLayout } from '@/resources/admin-panel/content-layout'
+import { CatalogoGrid } from '@/resources/catalog/catalog-grid'
+import { PaginationComponent } from '@/resources/general-products/components/pagination-component'
+import { ProductsFilters } from '@/resources/general-products/components/products-filters'
+import { ProductSheet } from '@/resources/general-products/components/table/product-sheet'
+import { Button } from '@/resources/shared/ui/button'
+import { Input } from '@/resources/shared/ui/input'
 import { FormEvent, useState } from 'react'
 
 export default function CatalogPage() {

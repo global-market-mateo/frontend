@@ -1,15 +1,15 @@
 import { set, useForm } from 'react-hook-form'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../../../../components/ui/form'
-import { Input } from '../../../../../components/ui/input'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/resources/shared/ui/form'
+import { Input } from '@/resources/shared/ui/input'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '../../../../../components/ui/button'
+import { Button } from '@/resources/shared/ui/button'
 import { useState } from 'react'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../../../components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/resources/shared/ui/table'
 import { CirclePlus } from 'lucide-react'
-import { Order } from '@/actions/orders/orderService'
-import { useUpdateOrder } from '@/actions/orders/orderMutations'
-import { useGetPublicProductsBusiness } from '@/actions/businesses/businessQueries'
+import { Order } from '@/resources/orders/services/order-service'
+import { useUpdateOrder } from '@/resources/orders/services/order-mutations'
+import { useGetPublicProductsBusiness } from '@/resources/business/services/business-queries'
 
 const formSchema = z.object({
 	title: z.string().min(2, { message: 'La busqueda debe tener al menos 2 caracteres' })

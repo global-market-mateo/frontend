@@ -3,14 +3,14 @@
 import { Badge, Check, Plus } from 'lucide-react'
 import { ConfirmOrder } from './(components)/ConfirmOrder'
 import { RemoveProductOrder } from './(components)/RemoveProductOrder'
-import { useGetOrderByid } from '@/actions/orders/orderQueries'
-import { ContentLayout } from '@/components/admin-panel/content-layout'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useGetOrderByid } from '@/resources/orders/services/order-queries'
+import { ContentLayout } from '@/resources/admin-panel/content-layout'
+import { Card, CardContent, CardHeader, CardTitle } from '@/resources/shared/ui/card'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@radix-ui/react-dialog'
-import { Button } from '@/components/ui/button'
-import { DialogHeader } from '@/components/ui/dialog'
+import { Button } from '@/resources/shared/ui/button'
+import { DialogHeader } from '@/resources/shared/ui/dialog'
 import { AddProductOrder } from './(components)/AddProductOrder'
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/resources/shared/ui/table'
 
 export default function OrderId({ params: { id } }: { params: { id: string } }) {
 	const { data: order } = useGetOrderByid({ id })

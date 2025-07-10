@@ -1,8 +1,8 @@
 'use client'
 
-import { ContentLayout } from '@/components/admin-panel/content-layout'
-import { columns } from '@/components/products/table/columns'
-import { DataTable } from '@/components/products/table/data-table'
+import { ContentLayout } from '@/resources/admin-panel/content-layout'
+import { columns } from '@/resources/general-products/components/table/columns'
+import { DataTable } from '@/resources/general-products/components/table/data-table'
 
 export default function ProductsPage() {
 	return (

@@ -1,7 +1,7 @@
 'use client'
-import { useGetUser } from '@/actions/auth/getUser'
-import { ContentLayout } from '@/components/admin-panel/content-layout'
-import { BussinessLocation } from '@/components/BussinessConfig/location/BussinessLocation'
+import { ContentLayout } from '@/resources/admin-panel/content-layout'
+import { useGetUser } from '@/resources/auth/services/get-user'
+import { BussinessLocation } from '@/resources/business/components/location/bussiness-location'
 
 export default function BusinessLocationPage() {
 	const { data, error } = useGetUser()
